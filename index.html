@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>昆明能杉网络科技有限公司 - 数字科技·如杉生长</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            background: #040a06;
+            color: #d8e8d0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #040a06; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #10b981, #059669);
+            border-radius: 3px;
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            padding: 18px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(4, 10, 6, 0.92);
+            backdrop-filter: blur(20px);
+            padding: 12px 80px;
+            box-shadow: 0 4px 30px rgba(16, 185, 129, 0.08);
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none;
+        }
+        .nav-logo .logo-icon {
+            width: 44px; height: 44px;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        /* 杉树Logo */
+        .tree-logo {
+            position: relative;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .tree-logo .tree-layer {
+            background: linear-gradient(135deg, #10b981, #059669);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation: treeBreathe 2.5s ease-in-out infinite;
+        }
+        .tree-logo .tree-layer:nth-child(1) { width: 34px; height: 10px; margin-bottom: -3px; animation-delay: 0s; }
+        .tree-logo .tree-layer:nth-child(2) { width: 28px; height: 10px; margin-bottom: -3px; animation-delay: 0.2s; }
+        .tree-logo .tree-layer:nth-child(3) { width: 22px; height: 10px; margin-bottom: -3px; animation-delay: 0.4s; }
+        .tree-logo .tree-layer:nth-child(4) { width: 16px; height: 10px; animation-delay: 0.6s; }
+        .tree-logo .tree-trunk {
+            width: 5px; height: 10px;
+            background: linear-gradient(180deg, #10b981, #047857);
+            border-radius: 0 0 2px 2px;
+            margin-top: -1px;
+        }
+        .nav-logo .logo-glow {
+            position: absolute;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
+            animation: logoGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes treeBreathe {
+            0%, 100% { opacity: 0.75; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.06); }
+        }
+        @keyframes logoGlow {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.4); opacity: 0.15; }
+        }
+
+        .nav-logo .logo-text {
+            font-size: 20px; font-weight: 700;
+            background: linear-gradient(135deg, #10b981, #34d399, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex; gap: 36px; align-items: center;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #b0c0a0; text-decoration: none;
+            font-size: 14px; font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative; padding: 4px 0;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: #34d399; }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ========== Hero ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            padding: 120px 80px 80px;
+        }
+
+        /* 粒子 - 绿叶飘落效果 */
+        .hero-particles {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: #10b981;
+            border-radius: 50% 0 50% 0;
+            animation: leafFall linear infinite;
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.4), 0 0 12px rgba(16, 185, 129, 0.2);
+        }
+        @keyframes leafFall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) scale(0);
+                opacity: 0;
+            }
+            8% { opacity: 1; }
+            90% { opacity: 0.7; }
+            100% {
+                transform: translateY(105vh) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* 杉树森林背景剪影 */
+        .forest-bg {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 350px;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+        .forest-bg .tree-silhouette {
+            position: absolute; bottom: 0;
+            width: 0; height: 0;
+            border-left: solid transparent;
+            border-right: solid transparent;
+            border-bottom: solid #10b981;
+        }
+
+        /* 光柱 */
+        .light-pillars {
+            position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 400px;
+            pointer-events: none;
+        }
+        .light-pillar {
+            position: absolute; bottom: 0;
+            background: linear-gradient(to top, rgba(16, 185, 129, 0.12), transparent);
+            animation: pillarFlicker 3.5s ease-in-out infinite;
+        }
+        .light-pillar:nth-child(1) { left: 10%; width: 2px; height: 320px; animation-delay: 0s; }
+        .light-pillar:nth-child(2) { left: 28%; width: 1px; height: 260px; animation-delay: 0.6s; }
+        .light-pillar:nth-child(3) { left: 48%; width: 3px; height: 380px; animation-delay: 1.2s; }
+        .light-pillar:nth-child(4) { left: 66%; width: 1px; height: 280px; animation-delay: 1.8s; }
+        .light-pillar:nth-child(5) { left: 84%; width: 2px; height: 340px; animation-delay: 2.4s; }
+        @keyframes pillarFlicker {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.9; }
+        }
+
+        .hero-content {
+            position: relative; z-index: 2;
+            text-align: center; max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 30px;
+            font-size: 13px; color: #34d399;
+            letter-spacing: 4px; margin-bottom: 32px;
+            animation: badgeGlow 2.5s ease-in-out infinite;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        @keyframes badgeGlow {
+            0%, 100% { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 10px rgba(16, 185, 129, 0); }
+            50% { border-color: rgba(16, 185, 129, 0.6); box-shadow: 0 0 24px rgba(16, 185, 129, 0.18); }
+        }
+        .hero-title {
+            font-size: 56px; font-weight: 800;
+            line-height: 1.3; margin-bottom: 24px;
+            letter-spacing: 3px;
+        }
+        .hero-title .green {
+            background: linear-gradient(135deg, #10b981, #34d399, #059669, #10b981);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: greenShimmer 3.5s ease infinite;
+        }
+        .hero-title .white { color: #ffffff; }
+        @keyframes greenShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .hero-subtitle {
+            font-size: 18px; color: #90a090;
+            margin-bottom: 48px; letter-spacing: 2px;
+            line-height: 1.8;
+        }
+        .hero-btns {
+            display: flex; gap: 20px;
+            justify-content: center; flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+        .btn-primary {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            border: none; border-radius: 8px;
+            font-size: 15px; font-weight: 600;
+            cursor: pointer; letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+        .btn-outline {
+            padding: 14px 40px;
+            background: transparent;
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 8px;
+            font-size: 15px; font-weight: 600;
+            cursor: pointer; letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-outline:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+            transform: translateY(-3px);
+        }
+
+        .hero-stats {
+            display: flex; gap: 60px;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat .number {
+            font-size: 36px; font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block; line-height: 1;
+        }
+        .hero-stat .label {
+            font-size: 13px; color: #788878;
+            margin-top: 8px; letter-spacing: 1px;
+        }
+
+        /* ========== 通用Section ========== */
+        section {
+            padding: 100px 80px; position: relative;
+        }
+        .section-title {
+            text-align: center; margin-bottom: 64px;
+        }
+        .section-title .sub {
+            font-size: 13px; color: #34d399;
+            letter-spacing: 4px; margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .section-title h2 {
+            font-size: 38px; font-weight: 800;
+            color: #fff; letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+        .section-title .line {
+            width: 60px; height: 3px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            margin: 0 auto; border-radius: 2px;
+        }
+
+        /* ========== 服务领域 ========== */
+        .services { background: #060d08; }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px; max-width: 1200px; margin: 0 auto;
+        }
+        .service-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 16px;
+            padding: 36px 28px;
+            transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+            cursor: pointer;
+        }
+        .service-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .service-card:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .service-card:hover::before { opacity: 1; }
+        .service-icon {
+            width: 56px; height: 56px; border-radius: 14px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; font-size: 26px;
+            transition: all 0.3s ease;
+        }
+        .service-card:hover .service-icon {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.18));
+            transform: scale(1.05);
+        }
+        .service-card h3 {
+            font-size: 18px; font-weight: 700;
+            color: #fff; margin-bottom: 12px; letter-spacing: 1px;
+        }
+        .service-card p {
+            font-size: 14px; color: #789878; line-height: 1.8;
+        }
+
+        /* ========== 产品中心 ========== */
+        .products { background: #040a06; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px; max-width: 1200px; margin: 0 auto;
+        }
+        .product-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+            cursor: pointer;
+            display: flex; gap: 28px; align-items: flex-start;
+        }
+        .product-card:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .product-card .prod-icon {
+            width: 64px; height: 64px; min-width: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px;
+        }
+        .product-card h3 {
+            font-size: 20px; font-weight: 700;
+            color: #fff; margin-bottom: 8px; letter-spacing: 1px;
+        }
+        .product-card p {
+            font-size: 14px; color: #789878; line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .product-card .tag {
+            display: inline-block;
+            padding: 4px 14px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 12px; color: #34d399;
+            letter-spacing: 1px;
+        }
+
+        /* ========== 关于我们 ========== */
+        .about { background: #060d08; }
+        .about-content {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+        }
+        .about-text h3 {
+            font-size: 28px; font-weight: 800;
+            color: #fff; margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+        .about-text p {
+            font-size: 15px; color: #90a090;
+            line-height: 2; margin-bottom: 32px;
+        }
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .about-feature {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.08);
+            transition: all 0.3s ease;
+        }
+        .about-feature:hover {
+            border-color: rgba(16, 185, 129, 0.25);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .about-feature .feat-icon { font-size: 28px; margin-bottom: 10px; }
+        .about-feature h4 {
+            font-size: 15px; color: #fff;
+            margin-bottom: 6px; letter-spacing: 1px;
+        }
+        .about-feature p {
+            font-size: 13px; color: #689868;
+            margin-bottom: 0; line-height: 1.6;
+        }
+
+        /* 杉树视觉 */
+        .about-visual {
+            display: flex; align-items: center;
+            justify-content: center; position: relative;
+        }
+        .tree-visual {
+            position: relative;
+            width: 200px; height: 300px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+        }
+        .tree-v-layer {
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.35), rgba(5, 150, 105, 0.08));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            animation: treeBreatheV 3s ease-in-out infinite;
+        }
+        .tree-v-layer:nth-child(1) { width: 160px; height: 50px; margin-bottom: -6px; animation-delay: 0s; }
+        .tree-v-layer:nth-child(2) { width: 130px; height: 50px; margin-bottom: -6px; animation-delay: 0.3s; }
+        .tree-v-layer:nth-child(3) { width: 100px; height: 50px; margin-bottom: -6px; animation-delay: 0.6s; }
+        .tree-v-layer:nth-child(4) { width: 70px; height: 50px; margin-bottom: -6px; animation-delay: 0.9s; }
+        .tree-v-layer:nth-child(5) { width: 40px; height: 50px; animation-delay: 1.2s; }
+        .tree-v-trunk {
+            width: 12px; height: 40px;
+            background: linear-gradient(180deg, #10b981, #047857);
+            border-radius: 0 0 4px 4px;
+        }
+        @keyframes treeBreatheV {
+            0%, 100% { opacity: 0.55; }
+            50% { opacity: 0.9; }
+        }
+
+        /* ========== 数据统计 ========== */
+        .stats-banner {
+            background: linear-gradient(135deg, #0a1a0c, #050f07, #0a1a0c);
+            padding: 80px 80px;
+            position: relative; overflow: hidden;
+        }
+        .stats-banner::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px; max-width: 1000px; margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+        .stat-item { text-align: center; }
+        .stat-item .stat-num {
+            font-size: 42px; font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block; line-height: 1;
+        }
+        .stat-item .stat-desc {
+            font-size: 14px; color: #90a090;
+            margin-top: 12px; letter-spacing: 1px;
+        }
+
+        /* ========== 合作伙伴 ========== */
+        .partners { background: #040a06; }
+        .partners-grid {
+            display: flex; flex-wrap: wrap; gap: 16px;
+            justify-content: center; max-width: 1100px; margin: 0 auto;
+        }
+        .partner-item {
+            padding: 16px 28px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(16, 185, 129, 0.08);
+            border-radius: 10px;
+            font-size: 14px; color: #90a090;
+            letter-spacing: 2px;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .partner-item:hover {
+            border-color: rgba(16, 185, 129, 0.35);
+            color: #34d399;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px);
+        }
+
+        /* ========== 页脚 ========== */
+        .footer {
+            background: #030805;
+            padding: 60px 80px 30px;
+            border-top: 1px solid rgba(16, 185, 129, 0.08);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px; max-width: 1200px; margin: 0 auto 40px;
+        }
+        .footer-brand .f-logo {
+            font-size: 22px; font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px; letter-spacing: 2px;
+        }
+        .footer-brand p {
+            font-size: 13px; color: #689868; line-height: 1.8;
+        }
+        .footer-col h4 {
+            font-size: 15px; color: #fff;
+            margin-bottom: 20px; letter-spacing: 1px;
+        }
+        .footer-col a {
+            display: block; font-size: 13px;
+            color: #689868; text-decoration: none;
+            margin-bottom: 12px; transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        .footer-col a:hover {
+            color: #34d399; padding-left: 6px;
+        }
+        .footer-bottom {
+            text-align: center; padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13px; color: #507850;
+            letter-spacing: 1px; max-width: 1200px; margin: 0 auto;
+        }
+        .footer-social {
+            display: flex; gap: 16px; margin-top: 16px;
+        }
+        .footer-social .social-dot {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: #689868;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .footer-social .social-dot:hover {
+            border-color: #10b981; color: #34d399;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 1024px) {
+            .navbar { padding: 16px 30px; }
+            .navbar.scrolled { padding: 10px 30px; }
+            .nav-links { display: none; }
+            section { padding: 70px 30px; }
+            .hero { padding: 100px 30px 60px; }
+            .hero-title { font-size: 36px; }
+            .services-grid { grid-template-columns: 1fr 1fr; }
+            .products-grid { grid-template-columns: 1fr; }
+            .about-content { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .hero-stats { gap: 30px; }
+        }
+        @media (max-width: 640px) {
+            .hero-title { font-size: 28px; }
+            .services-grid { grid-template-columns: 1fr; }
+            .product-card { flex-direction: column; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .hero-btns { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-logo">
+            <div class="logo-icon">
+                <div class="tree-logo">
+                    <div class="tree-layer"></div>
+                    <div class="tree-layer"></div>
+                    <div class="tree-layer"></div>
+                    <div class="tree-layer"></div>
+                    <div class="tree-trunk"></div>
+                </div>
+                <div class="logo-glow"></div>
+            </div>
+            <span class="logo-text">能杉科技</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#home">首页</a></li>
+            <li><a href="#services">服务领域</a></li>
+            <li><a href="#products">产品中心</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#partners">合作伙伴</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="light-pillars">
+            <div class="light-pillar"></div>
+            <div class="light-pillar"></div>
+            <div class="light-pillar"></div>
+            <div class="light-pillar"></div>
+            <div class="light-pillar"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">数字科技 · 如杉生长</div>
+            <h1 class="hero-title">
+                <span class="green">扎根春城沃土</span><br>
+                <span class="green">蓬勃如杉</span><span class="white">向上生长</span>
+            </h1>
+            <p class="hero-subtitle">
+                昆明能杉网络科技有限公司坐落于四季如春的昆明<br>
+                以"能杉"为名，寓意如云杉般坚韧挺拔、蓬勃向上<br>
+                用专业网络技术服务，助力企业数字化蓬勃发展
+            </p>
+            <div class="hero-btns">
+                <a href="#services" class="btn-primary">了解服务</a>
+                <a href="#about" class="btn-outline">关于我们</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="number">150+</span>
+                    <span class="label">服务客户</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">40+</span>
+                    <span class="label">专业团队</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">200+</span>
+                    <span class="label">成功项目</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">6+</span>
+                    <span class="label">行业经验</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务领域 -->
+    <section class="services" id="services">
+        <div class="section-title">
+            <div class="sub">Core Services</div>
+            <h2>核心服务领域</h2>
+            <div class="line"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🌐</div>
+                <h3>网站与应用开发</h3>
+                <p>提供企业官网、电商平台、小程序等全方位Web应用开发服务，界面精美、性能卓越、响应式适配多终端。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔗</div>
+                <h3>系统集成服务</h3>
+                <p>为企业提供软硬件系统集成方案，打通信息孤岛，实现业务系统互联互通，提升整体运营管理效率。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">☁️</div>
+                <h3>云计算解决方案</h3>
+                <p>基于主流云平台，提供云架构设计、迁移部署、运维管理等一站式服务，帮助企业灵活利用云端资源。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3>数据分析服务</h3>
+                <p>运用先进数据分析技术，帮助企业挖掘数据价值，提供可视化报表、商业洞察与智能决策支持服务。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔒</div>
+                <h3>网络安全服务</h3>
+                <p>提供全面的网络安全解决方案，涵盖安全评估、渗透测试、安全加固等，全方位保障企业信息安全。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🛠️</div>
+                <h3>技术运维支持</h3>
+                <p>提供全天候专业技术运维服务，包括系统监控、故障处理、性能优化等，确保业务系统持续稳定运行。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品中心 -->
+    <section class="products" id="products">
+        <div class="section-title">
+            <div class="sub">Products</div>
+            <h2>产品中心</h2>
+            <div class="line"></div>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="prod-icon">🌲</div>
+                <div>
+                    <h3>企业智能管理平台</h3>
+                    <p>集OA办公、CRM客户管理、ERP资源计划于一体的企业级管理平台，支持多端协同，助力企业高效运营。</p>
+                    <span class="tag">企业级</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="prod-icon">📈</div>
+                <div>
+                    <h3>数据可视化系统</h3>
+                    <p>拖拽式数据大屏搭建工具，内置丰富的图表组件库，支持实时数据接入与动态刷新，让数据洞察一目了然。</p>
+                    <span class="tag">数据分析</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="prod-icon">📱</div>
+                <div>
+                    <h3>移动办公应用</h3>
+                    <p>基于移动端的办公应用套件，支持即时通讯、流程审批、任务协作等功能，让团队随时随地高效协作。</p>
+                    <span class="tag">移动端</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="prod-icon">🛒</div>
+                <div>
+                    <h3>电商系统解决方案</h3>
+                    <p>覆盖B2B、B2C、O2O等多种模式的电商平台，集成商品管理、订单处理、会员营销等全方位功能模块。</p>
+                    <span class="tag">电商</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section class="about" id="about">
+        <div class="section-title">
+            <div class="sub">About Us</div>
+            <h2>关于我们</h2>
+            <div class="line"></div>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>能者如杉 · 蓬勃向上</h3>
+                <p>
+                    昆明能杉网络科技有限公司坐落于四季如春的云南省昆明市，是一家专注于网络技术与数字化服务的创新型企业。
+                    公司以"能杉"命名，寓意着如云杉般坚韧不拔的精神与蓬勃向上的生命力——能者有力，杉者长青。
+                    我们扎根春城沃土，以深厚的技术实力和专业的服务态度，助力每一位客户在数字化浪潮中蓬勃生长。
+                </p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="feat-icon">🌲</div>
+                        <h4>坚韧可靠</h4>
+                        <p>如云杉扎根，技术架构稳健持久</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feat-icon">🌱</div>
+                        <h4>蓬勃生长</h4>
+                        <p>持续创新迭代，与客户共同成长</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feat-icon">🎯</div>
+                        <h4>精准专业</h4>
+                        <p>专注网络科技，深耕行业解决方案</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feat-icon">🤝</div>
+                        <h4>合作共赢</h4>
+                        <p>以诚相待，携手共创数字化未来</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div class="tree-visual">
+                    <div class="tree-v-layer"></div>
+                    <div class="tree-v-layer"></div>
+                    <div class="tree-v-layer"></div>
+                    <div class="tree-v-layer"></div>
+                    <div class="tree-v-layer"></div>
+                    <div class="tree-v-trunk"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 数据统计 -->
+    <div class="stats-banner">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-num">150+</span>
+                <span class="stat-desc">服务企业客户</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">40+</span>
+                <span class="stat-desc">专业技术团队</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">200+</span>
+                <span class="stat-desc">累计成功项目</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">99.5%</span>
+                <span class="stat-desc">客户满意度</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 合作伙伴 -->
+    <section class="partners" id="partners">
+        <div class="section-title">
+            <div class="sub">Partners</div>
+            <h2>合作伙伴</h2>
+            <div class="line"></div>
+        </div>
+        <div class="partners-grid">
+            <div class="partner-item">云南大学</div>
+            <div class="partner-item">昆明理工大学</div>
+            <div class="partner-item">云南师范大学</div>
+            <div class="partner-item">华为</div>
+            <div class="partner-item">阿里云</div>
+            <div class="partner-item">腾讯云</div>
+            <div class="partner-item">百度智能云</div>
+            <div class="partner-item">京东科技</div>
+            <div class="partner-item">字节跳动</div>
+            <div class="partner-item">浪潮集团</div>
+            <div class="partner-item">新华三</div>
+            <div class="partner-item">中软国际</div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="f-logo">能杉科技</div>
+                <p>昆明能杉网络科技有限公司，坐落于四季如春的云南省昆明市，专注于网络技术与数字化服务。以"能杉"为名，寓意如云杉般坚韧挺拔、蓬勃向上，致力于为客户提供专业可靠的数字化解决方案。</p>
+                <div class="footer-social">
+                    <div class="social-dot">微</div>
+                    <div class="social-dot">博</div>
+                    <div class="social-dot">抖</div>
+                    <div class="social-dot">领</div>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>快速链接</h4>
+                <a href="#home">首页</a>
+                <a href="#services">服务领域</a>
+                <a href="#products">产品中心</a>
+                <a href="#about">关于我们</a>
+            </div>
+            <div class="footer-col">
+                <h4>服务领域</h4>
+                <a href="#">网站开发</a>
+                <a href="#">系统集成</a>
+                <a href="#">云计算</a>
+                <a href="#">数据分析</a>
+            </div>
+            <div class="footer-col">
+                <h4>联系方式</h4>
+                <a href="#">电话：联系我们</a>
+                <a href="#">邮箱：contact@nengshan.com</a>
+                <a href="#">地址：云南省昆明市</a>
+                <a href="#">工作时间：周一至周五 9:00-18:00</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2024 昆明能杉网络科技有限公司 | All Rights Reserved | 滇ICP备XXXXXXXX号
+        </div>
+    </footer>
+
+    <script>
+        // 导航栏滚动
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // 生成绿叶粒子
+        const particlesContainer = document.getElementById('heroParticles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 8 + 6) + 's';
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particlesContainer.appendChild(particle);
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
